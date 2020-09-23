@@ -1,0 +1,75 @@
+import numpy as np
+
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+
+
+input_features = np.array([[0,0],[0,1],[1,0],[1,1]])
+input_features = input_features.reshape(4,2)
+print ('input:\n',input_features)
+# Define target output:
+target_output = np.array([[0,1,1,1]])
+# Reshaping our target output into vector:
+target_output = target_output.reshape(4,1)
+
+print ('target:\n',target_output)
+
+#input_features = np.array([1, 0])
+#input_features = input_features.reshape(1, 2)
+#target_output = np.array([1])
+#target_output = target_output.reshape(1, 1)
+
+
+
+# Define weights:
+weights = np.array([[0.025],[0.025]])
+
+print ('init weights:\n',weights)
+# Bias weight:
+bias = 0.025
+print ('init bias:\n',bias)
+# Learning Rate:
+lr = 1000
+
+for epoch in range(10):
+    inputs = input_features
+    #Feedforward input:
+    i = np.dot(inputs, weights) + bias
+    #Feedforward output:
+    o = sigmoid(i)
+    #Backpropogation
+    #Calculating derivative:
+    de_do = o - target_output
+    do_di = o*(1-o)
+
+    #Multiplying individual derivatives:
+    deriv = de_do * do_di #Multiplying with the 3rd individual derivative:
+    #Finding the transpose of input_features:
+    inputs = input_features.T
+    deriv_final = np.dot(inputs,deriv)
+
+    #Updating the weights values:
+    weights -= lr * deriv_final #Updating the bias weight value:
+    for idx in deriv:
+        bias -= lr * idx #Check the final values for weight and biasprint (weights)
+
+print ('updated weights:\n',weights)
+print ('updated bias:\n',bias)
+
+
+
+
+def net1(single_point): 
+  print('put' , single_point , 'through the net:' )
+  #Taking inputs:
+  result1 = np.dot(single_point, weights) + bias
+  result2 = sigmoid(result1)
+  #Print final result
+  print('',single_point,'->',result2)
+
+net1 (np.array([0,0]))
+net1 (np.array([1,0]))
+net1 (np.array([0,1]))
+net1 (np.array([1,1]))
+
+net1 (np.array([-0.2,0.5]))
